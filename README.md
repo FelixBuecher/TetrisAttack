@@ -1,13 +1,5 @@
 # Tetris Attack - Felix Bücher
 
-## Vorwort
-
-Vorweg sei gesagt, mein Ziel ist es mit diesem Spiel in die Hall of Fame zu kommen,
-auch wenn es angekündigt wurde, dass dieses Jahr keine Spiele in diese aufgenommen werden,
-wollte ich dennoch ein Spiel erstellen, welches dieser würdig ist.
-
-
-
 ## Beschreibung des Spiels
 
 Dies ist eine Tetris Attack Einzelspielervariante, 
