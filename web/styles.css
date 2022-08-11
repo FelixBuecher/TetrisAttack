@@ -1,0 +1,471 @@
+/* ------------------------------------------------------------------------------------------
+ * General site settings                                                                    |
+ * ------------------------------------------------------------------------------------------
+ */
+html, body {
+  font-family: "Comfortaa", serif;
+  background: #332762;
+  user-select: none;
+  color: #DCD330;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.center {
+  text-align: center;
+  left: 0;
+  right: 0;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+button {
+  position: absolute;
+  width: 200px;
+  color: #DCD330;
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #4b32a3;
+  transition: background 0.3s;
+  font-size: max(1.3333vw, 20px);
+}
+
+button:hover {
+  background: #6346cf;
+}
+
+.hidden {
+  display: none;
+}
+
+.toggle {
+  display: flex;
+  animation: fadeIn 400ms linear;
+}
+
+.title {
+  font-size: max(5vw, 40px);
+}
+
+.medium-text {
+  font-size: max(1.3333vw, 20px);
+}
+
+.small-text {
+  font-size: max(1vw, 15px);
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Index page                                                                               |
+ * ------------------------------------------------------------------------------------------
+ */
+#index-page > .title {
+  letter-spacing: .3em;
+  animation: pulsate 2s ease-in-out infinite alternate;
+}
+
+#credits {
+  position: absolute;
+  top: max(90%, 400px);
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Highscorepage                                                                            |
+ * ------------------------------------------------------------------------------------------
+ */
+#highscore-page-table {
+  display: flex;
+  justify-content: center;
+}
+
+#highscore-table {
+  border-collapse: collapse;
+  position: absolute;
+  top: max(25%, 125px);
+  height: max(20vw, 250px);
+  width: max(40vw, 250px);
+  border: solid black;
+  background: #4b32a3;
+}
+
+.first-row {
+  border-bottom: 2px solid black;
+  background: #5e45b8;
+}
+
+#no-connection-info {
+  position: absolute;
+  top: max(25%, 125px);
+  text-align: center;
+  z-index: 100;
+  width: max(40vw, 250px);
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Game page                                                                                |
+ * ------------------------------------------------------------------------------------------
+ */
+#game-page-table {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.wrapper {
+  align-items: flex-start;
+  height: calc(85vh - 50px);
+}
+
+.instruction-container {
+  width: 20vw;
+  height: 100%;
+}
+
+.instruction {
+  width: 100%;
+  height: 100%;
+}
+
+.hud {
+  border: solid black;
+  background: #31227e;
+  width: 10vw;
+}
+
+#playing-field {
+  width: 26vw;
+  height: 100%;
+  border: solid black;
+}
+
+#playing-field td {
+  border: 1px solid black;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.empty {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.red {
+  background-image: url("res/blocks/red.png");
+}
+
+.blue {
+  background-image: url("res/blocks/blue.png");
+}
+
+.green {
+  background-image: url("res/blocks/green.png");
+}
+
+.yellow {
+  background-image: url("res/blocks/yellow.png");
+}
+
+.purple {
+  background-image: url("res/blocks/purple.png");
+}
+
+.orange {
+  background-image: url("res/blocks/orange.png");
+}
+
+.eradicator {
+  background-image: url("res/blocks/eradicator.png");
+}
+
+.selector-left {
+  outline: #ebb668 dashed 3px;
+  animation: selectorPulseLeft 1s alternate infinite linear;
+}
+
+.selector-right {
+  outline: #ebb668 dashed 3px;
+  animation: selectorPulseRight 1s alternate infinite linear;
+}
+
+.swapleft {
+  animation: moveLeft 60ms;
+}
+
+.swapright {
+  animation: moveRight 60ms;
+}
+
+.removeblock {
+  background-color: aquamarine;
+  transition: background-color 100ms linear;
+}
+
+.window {
+  position: absolute;
+  width: min(26vw, 300px);
+  height: min(80vh, 400px);
+  top: max(20%, 100px);
+  border: solid black 3px;
+  z-index: 5;
+  background-color: #6346cf;
+}
+
+.window > p {
+  margin-top: 125px;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Stage selection page                                                                     |
+ * ------------------------------------------------------------------------------------------
+ */
+#stage-selection-page {
+  height: 50%;
+}
+
+#selection-area {
+  width: max(50%, 400px);
+  height: min(100%, 500px);
+  background: black;
+  margin-top: 100px;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 5px;
+  padding: 5px;
+}
+
+.stage-selection {
+  border-radius: 10px;
+  background: #80233e;
+  cursor: pointer;
+  transition: background 300ms linear;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.stage-selection > p {
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.stage-selection:hover {
+  background: #a33b59;
+}
+
+.clear {
+  background: #4fa734;
+}
+
+.clear:hover {
+  background: #58d235;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Mode selection page                                                                      |
+ * ------------------------------------------------------------------------------------------
+ */
+#game-selection-page {
+  height: 100%;
+}
+
+.side-select {
+  height: 100%;
+  width: 50%;
+  text-align: center;
+  transition: width 300ms linear, background 300ms linear;
+  cursor: pointer;
+}
+
+.side-select:hover {
+  background: #6346cf;
+  width: 80%;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Rulepage                                                                                 |
+ * ------------------------------------------------------------------------------------------
+ */
+#instruction {
+  position: absolute;
+  top: max(20%, 100px);
+  height: max(25vw, 250px);
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Losepage                                                                                 |
+ * ------------------------------------------------------------------------------------------
+ */
+#score {
+  position: absolute;
+  width: 300px;
+  top: 25%;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * New player page                                                                          |
+ * ------------------------------------------------------------------------------------------
+ */
+#player-name-page > .title {
+  animation: slideIn 2s;
+}
+
+#name-information {
+  position: absolute;
+  top: 25%;
+  animation: fadeInDown 2s;
+  animation-delay: 1s;
+  animation-fill-mode: backwards;
+}
+
+#player-name-input {
+  position: absolute;
+  top: 35%;
+  font-family: Comfortaa, serif;
+  color: white;
+  font-size: max(1.4vw, 20px);
+  width: 240px;
+  height: max(2vw, 30px);
+  background-color: #4b32a3;
+  border: 2px solid black;
+  border-radius: 10px;
+  transition: all 0.3s;
+  animation: fadeInDown 2s;
+  animation-delay: 1.5s;
+  animation-fill-mode: backwards;
+}
+
+#player-name-input:focus, #player-name-input:hover {
+  background: #6346cf;
+}
+
+#longer-name-info {
+  position: absolute;
+  top: 55%;
+  animation: fadeInDown 2s;
+  justify-content: center;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Button positions                                                                         |
+ * ------------------------------------------------------------------------------------------
+ */
+#start-button {
+  top: max(40%, 200px);
+}
+
+#highscore-button {
+  top: max(50%, 250px);
+}
+
+#rule-button {
+  top: max(60%, 300px);;
+}
+
+#change-name-button {
+  top: max(70%, 350px);
+}
+
+.back-button {
+  top: max(70%, 350px);
+}
+
+#again-button {
+  top: max(60%, 300px);;
+}
+
+#player-name-button {
+  top: max(50%, 250px);
+  animation: fadeInDown 2s;
+  animation-delay: 1.5s;
+  animation-fill-mode: backwards;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Animations                                                                               |
+ * ------------------------------------------------------------------------------------------
+ */
+@keyframes moveLeft {
+  from {}
+  to {
+    transform: translateX(-40px);
+  }
+}
+
+@keyframes moveRight {
+  from {}
+  to {
+    transform: translateX(40px);
+  }
+}
+
+@keyframes selectorPulseLeft {
+  from {
+    outline: #ebb668 dashed 3px;
+  }
+  to {
+    outline: #ebb668 dashed 6px;
+  }
+}
+
+@keyframes selectorPulseRight {
+  from {
+    outline: #ebb668 dashed 3px;
+  }
+  to {
+    outline: #ebb668 dashed 6px;
+  }
+}
+
+@keyframes slideIn  {
+  from {
+    transform:translateY(-100px);
+  }
+  to {
+    transform:translateY(0);
+  }
+}
+
+@keyframes fadeInDown  {
+  from {
+    opacity:0;
+    transform:translateY(-20px);
+  }
+  to {
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes fadeIn  {
+  from {
+    opacity:0;
+  }
+  to {
+    opacity:1;
+    display: block;
+  }
+}
+
+@keyframes fadeOut  {
+  from {
+    opacity:1;
+  }
+  to {
+    opacity:0;
+    display: none;
+  }
+}
+
+@keyframes pulsate {
+  from {}
+  to {
+    color: #ebb668;
+    text-shadow: 0 0 20px #ebb668, 0 0 40px #ebb668;
+  }
+}

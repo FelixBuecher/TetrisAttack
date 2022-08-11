@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <title>Tetris Attack</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+    <script defer src="main.dart.js"></script>
+</head>
+
+<body>
+    <!-- Page to get the players name and store it locally so that I can use the name for the highscores later -->
+    <div id="player-name-page" class="hidden">
+        <p class="title center">Please enter your name</p>
+        <p id="name-information" class="center medium-text">(this is used for the highscore)</p>
+        <input id="player-name-input" type="text" class="center">
+        <button id="player-name-button" class="center">Accept</button>
+        <p id="longer-name-info" class="hidden center">Your name should be at least 3 chars long :D</p>
+    </div>
+
+    <!-- Landing page, player can select to start the game, or view rules / highscore here -->
+    <div id="index-page" class="hidden">
+        <p class="title center">Tetris Attack</p>
+        <button id="start-button" class="center">Play</button>
+        <button id="highscore-button" class="center">Highscores</button>
+        <button id="rule-button" class="center">How to play</button>
+        <button id="change-name-button" class="center">Change name</button>
+        <p id="credits" class="center">Made by Felix Bücher</p>
+    </div>
+
+    <!-- Highscore view -->
+    <div id="highscore-page" class="hidden">
+        <table id="highscore-page-table" class="center">
+            <tr>
+                <td>
+                    <p class="title center">Highscores</p>
+                    <div id="loading-container" class="center">
+                        <img id="loading-picture" class="center" src="res/loading.gif" alt="loading"/>
+                    </div>
+                    <button id="highscore-back-button" class="back-button center">Back</button>
+                    <p id="no-connection-info" class="center small-text"></p>
+                    <table id="highscore-table" class="center">
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- How to play rules here -->
+    <div id="rule-page" class="hidden">
+        <p class="title center">Welcome to Tetris Attack!</p>
+        <img id="instruction" class="center" src="res/instructions.png" alt="instructions">
+        <button class="back-button center">Back</button>
+    </div>
+
+    <!-- Page that is shows for the played to chose between the puzzle or the survival mode -->
+    <div id="game-selection-page" class="hidden">
+        <div id="left-selection" class="side-select">
+            <p class="title">Puzzle mode</p>
+            <p class="center medium-text">In the puzzle mode, there are<br>
+                no new stones spawning, <br>
+                but you only have a limited number<br>
+                of moves to clear a stage!</p>
+        </div>
+        <div id="right-selection" class="side-select">
+            <p class="title">Survival mode</p>
+            <p class="center medium-text">The classic survival mode, <br>
+                survive as long as you can<br>
+                and get as many points as possible!</p>
+        </div>
+        <button class="back-button center">Back</button>
+    </div>
+
+    <!-- Page that is shows to the player once he selects the puzzle option, here will all puzzles be listed -->
+    <div id="stage-selection-page" class="hidden">
+        <div id="selection-area" class="center">
+        </div>
+        <button class="back-button center">Mainmenu</button>
+    </div>
+
+    <!-- Gamepage, with area for the game grid and some information about the current points -->
+    <div id="game-page" class="hidden">
+        <div id="pause-window" class="window hidden center">
+            <p class="center">The game is paused, press ESC or P to resume.</p>
+            <button class="back-button center">Mainmenu</button>
+        </div>
+        <div id="puzzle-window" class="window hidden center">
+            <p class="center">GGWP go next.</p>
+            <button class="back-button center">Back</button>
+        </div>
+        <table id="game-page-table" class="center">
+            <tr>
+                <td>
+                    <div class="wrapper">
+                        <div class="instruction-container">
+                            <img class="instruction" src="res/inst-left.png" alt="left-instructions">
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="wrapper">
+                        <div class="hud">
+                            <p id="current-time-text">Time</p>
+                            <p id="current-time">0</p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="wrapper">
+                        <table id="playing-field" class="center">
+                        </table>
+                        <p id="reset-hint"></p>
+                    </div>
+                </td>
+                <td>
+                    <div class="wrapper">
+                        <div class="hud">
+                            <p id="current-score-text">Score</p>
+                            <p id="current-score">0</p>
+                            <p id="current-speed-text">Speed lv.</p>
+                            <p id="current-speed">1</p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="wrapper">
+                        <div class="instruction-container">
+                            <img class="instruction" src="res/inst-right.png" alt="right-instructions">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Lose page, that will be shown once the game is over, it will display the final score and gives options to play again -->
+    <div id="lose-page" class="hidden">
+        <p class="title center">You lost</p>
+        <div id="score" class="center">
+            <p id="final-score-text" class="medium-text">Your final score is:</p>
+            <p id="final-score" class="medium-text">0</p>
+            <p id="final-time-text" class="medium-text">Seconds survived:</p>
+            <p id="final-time" class="medium-text">0</p>
+        </div>
+        <button id="again-button" class="center">Try again</button>
+        <button class="back-button center">Mainmenu</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+# Build und Deployment Pipeline
+# Do not change until you know what you are doing !!!
+
+image: "thlmylab/swakkd:1.24"
+
+variables:
+  DOMAIN: "DOMAIN TO DEPLOY HERE"
+  INGRESS: "False"
+
+stages:
+  - prepare
+  - compile
+  - build
+  - deploy
+  - expose
+  - destroy
+
+registry-cred:
+  stage: prepare
+  script:
+    - kubectl delete secret gitlab-registry-$CI_PROJECT_ID || true
+    - "kubectl create secret docker-registry gitlab-registry-$CI_PROJECT_ID \
+              --docker-server=$CI_REGISTRY \
+              --docker-username=image-registry \ 
+              --docker-password=$CI_REGISTRY_TOKEN \ "
+
+volumes:
+  stage: build
+  script:
+    - kubectl apply -f deploy/redis-pvc.yaml
+
+frontend-container:
+  stage: build
+  image: docker:dind
+  services: ["docker:dind"]
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/webapp:latest -f ./Dockerfile_frontend .
+    - docker push $CI_REGISTRY_IMAGE/webapp:latest
+
+backend-container:
+  stage: build
+  image: docker:dind
+  services: ["docker:dind"]
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/rest-api:latest -f ./Dockerfile_backend .
+    - docker push $CI_REGISTRY_IMAGE/rest-api:latest
+
+redis:
+  stage: deploy
+  script:
+    - kubectl apply -f deploy/redis-dep.yaml
+    - kubectl apply -f deploy/redis-svc.yaml
+
+webapp:
+  stage: deploy
+  script:
+    - mo deploy/webapp-dep.yaml | kubectl delete -f - || true
+    - mo deploy/webapp-dep.yaml | kubectl apply -f -
+    - mo deploy/webapp-svc.yaml | kubectl apply -f -
+
+rest:
+  stage: deploy
+  script:
+    - mo deploy/rest-dep.yaml | kubectl delete -f - || true
+    - mo deploy/rest-dep.yaml | kubectl apply -f -
+    - mo deploy/rest-svc.yaml | kubectl apply -f -
+
+ingress:
+  stage: expose
+  only:
+    variables:
+      - $INGRESS == "True"
+  script:
+    - HOST=webapp-$CI_PROJECT_ID.$DOMAIN mo deploy/webapp-ing.yaml | kubectl apply -f -
+    - HOST=rest-$CI_PROJECT_ID.$DOMAIN mo deploy/rest-ing.yaml | kubectl apply -f -

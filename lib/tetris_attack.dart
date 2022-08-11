@@ -1,0 +1,30 @@
+library tetris_attack;
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:html';
+import 'dart:math';
+import 'package:http/http.dart' as http;
+
+part 'view/view.dart';
+part 'view/pages/abstract_view.dart';
+part 'view/pages/index_view.dart';
+part 'view/pages/game_view.dart';
+part 'view/pages/highscore_view.dart';
+part 'view/pages/lose_view.dart';
+part 'view/pages/game_mode_view.dart';
+part 'view/pages/name_view.dart';
+part 'view/pages/stage_select_view.dart';
+part 'view/pages/rule_view.dart';
+part 'controller/page_controller.dart';
+part 'controller/modes/abstract_controller.dart';
+part 'controller/modes/survival_controller.dart';
+part 'controller/modes/puzzle_controller.dart';
+part 'model/modes/abstract_game.dart';
+part 'model/modes/survival_mode.dart';
+part 'model/modes/puzzle_mode.dart';
+part 'model/selector.dart';
+part 'model/field.dart';
+part 'util/config.dart';
+part 'util/tuple.dart';
+part 'util/local_storage.dart';
