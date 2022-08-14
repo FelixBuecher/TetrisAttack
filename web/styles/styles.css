@@ -1,0 +1,81 @@
+/* ------------------------------------------------------------------------------------------
+ * General site settings                                                                    |
+ * ------------------------------------------------------------------------------------------
+ */
+html, body {
+    font-family: "Garamond", serif;
+    background: #332762;
+    user-select: none;
+    color: #DCD330;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.page {
+    display: none;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+}
+
+.middle-content {
+    position: absolute;
+    top: max(20vh, 80px);
+}
+
+button {
+    font-family: "Garamond", serif;
+    position: absolute;
+    color: #DCD330;
+    border: 2px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #4b32a3;
+    transition: background 0.3s;
+    height: max(4vh, 25px);
+    width: min(25vh, 200px);
+    font-size: max(2.5vh, 12px);
+}
+
+button:hover {
+    background: #6346cf;
+}
+
+.toggle {
+    display: flex;
+    animation: fadeIn 400ms linear;
+}
+
+.title {
+    font-size: max(8vh, 40px);
+}
+
+.medium-text {
+    font-size: max(3vh, 20px);
+}
+
+.small-text {
+    font-size: max(2vh, 15px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+        display: block;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        display: none;
+    }
+}

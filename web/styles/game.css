@@ -1,0 +1,234 @@
+/* ------------------------------------------------------------------------------------------
+ * Game page                                                                                |
+ * ------------------------------------------------------------------------------------------
+ */
+#game-page-table {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.wrapper {
+    align-items: flex-start;
+    height: calc(85vh - 50px);
+}
+
+.instruction-container {
+    width: 15vw;
+    height: 100%;
+}
+
+.instruction {
+    margin-top: 100px;
+    width: 15vw;
+    height: 70%;
+}
+
+.hud {
+    border: solid black;
+    background: #31227e;
+    width: max(10vw, 100px);
+    border-radius: 10px;
+}
+
+#playing-field-wrapper {
+    width: 25vw;
+}
+
+#playing-field {
+    width: 100%;
+    height: 100%;
+    border: solid black;
+}
+
+#playing-field td {
+    border: 1px solid black;
+    border-radius: 5px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+}
+
+.window {
+    position: absolute;
+    padding-left: 25px;
+    padding-right: 25px;
+    width: max(20vw, 300px);
+    height: max(50vh, 300px);
+    top: max(15vh, 50px);
+    border: solid black 3px;
+    z-index: 100;
+    background-color: #31227e;
+    border-radius: 10px;
+}
+
+.window > p {
+    margin-top: 50px;
+}
+
+#puzzle-mainmenu-button, #pause-mainmenu-button {
+    top: 80%;
+}
+
+#puzzle-retry-button, #pause-stageselect-button {
+    top: 60%;
+}
+
+.hidden {
+    display: none;
+}
+
+.show-button {
+    display: block;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Blocks                                                                                   |
+ * ------------------------------------------------------------------------------------------
+ */
+
+.empty {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.red {
+    background-image: url("../res/blocks/red.png");
+}
+
+.blue {
+    background-image: url("../res/blocks/blue.png");
+}
+
+.green {
+    background-image: url("../res/blocks/green.png");
+}
+
+.yellow {
+    background-image: url("../res/blocks/yellow.png");
+}
+
+.purple {
+    background-image: url("../res/blocks/purple.png");
+}
+
+.orange {
+    background-image: url("../res/blocks/orange.png");
+}
+
+.eradicator {
+    background-image: url("../res/blocks/eradicator.png");
+}
+
+.selector-left {
+    outline: #ebb668 dashed 3px;
+    animation: selectorPulseLeft 1s alternate infinite linear;
+}
+
+.selector-right {
+    outline: #ebb668 dashed 3px;
+    animation: selectorPulseRight 1s alternate infinite linear;
+}
+
+.swapleft {
+    animation: moveLeft 60ms;
+}
+
+.swapright {
+    animation: moveRight 60ms;
+}
+
+.removeblock {
+    background-color: aquamarine;
+    transition: background-color 100ms linear;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Tutorial                                                                                 |
+ * ------------------------------------------------------------------------------------------
+ */
+#tutorial-window {
+    position: absolute;
+    z-index: 999;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: max(15vw, 175px);
+    height: max(25vh, 175px);
+}
+
+#tutorial-text {
+    margin-top: 25px;
+}
+
+#tutorial-confirm-button {
+    height: max(3vh, 20px);
+    width: min(20vh, 100px);
+    font-size: max(2.25vh, 12px);
+    top: 80%;
+}
+
+.tutorial1 {
+    display: flex;
+}
+
+.tutorial2 {
+    top: max(15vh, 50px);
+    right: max(15vw, 50px);
+    display: flex;
+}
+
+.tutorial3 {
+    display: flex;
+}
+
+.tutorial4 {
+    display: flex;
+}
+
+.tutorial5 {
+    display: flex;
+}
+
+.highlight {
+    box-shadow: 0 0 0 99999px rgba(0, 0, 0, .8);
+    position: relative;
+    z-index: 998;
+    pointer-events: auto;
+    transition: all 0.5s ease;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Animations                                                                               |
+ * ------------------------------------------------------------------------------------------
+ */
+
+@keyframes moveLeft {
+    from {}
+    to {
+        transform: translateX(-40px);
+    }
+}
+
+@keyframes moveRight {
+    from {}
+    to {
+        transform: translateX(40px);
+    }
+}
+
+@keyframes selectorPulseLeft {
+    from {
+        outline: #ebb668 dashed 3px;
+    }
+    to {
+        outline: #ebb668 dashed 6px;
+    }
+}
+
+@keyframes selectorPulseRight {
+    from {
+        outline: #ebb668 dashed 3px;
+    }
+    to {
+        outline: #ebb668 dashed 6px;
+    }
+}

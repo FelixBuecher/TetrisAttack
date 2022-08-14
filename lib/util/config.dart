@@ -83,10 +83,8 @@ const primarySwap = KeyCode.SPACE;
 const secondarySwap = KeyCode.E;
 // Push new blocks.
 const primaryPushStones = KeyCode.SHIFT;
-const secondaryPushStones = KeyCode.ENTER;
 // Pause game
 const primaryPauseGame = KeyCode.ESC;
-const secondaryPauseGame = KeyCode.P;
 // Reset puzzle mode
 const primaryResetPuzzle = KeyCode.R;
 

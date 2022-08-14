@@ -5,22 +5,38 @@ class GameView extends AbstractView {
   GameView() : super(querySelector('#game-page'));
 
   List<List<HtmlElement>> _field;
-  final _backButton = querySelector('#pause-window > .back-button');
-  final _puzzleBackButton = querySelector('#puzzle-window > .back-button');
-  final _playingField = querySelector('#playing-field');
-  final _score = querySelector('#current-score');
-  final _scoreText = querySelector('#current-score-text');
-  final _time = querySelector('#current-time');
-  final _speed = querySelector('#current-speed');
-  final _speedText = querySelector('#current-speed-text');
-  final _pauseWindow = querySelector('#pause-window');
-  final _puzzleWindow = querySelector('#puzzle-window');
-  final _resetHint = querySelector('#reset-hint');
+  final _pauseBackButton    = querySelector('#pause-mainmenu-button');
+  final _pauseStageButton   = querySelector('#pause-stageselect-button');
+  final _puzzleBackButton   = querySelector('#puzzle-mainmenu-button');
+  final _puzzleRetryButton  = querySelector('#puzzle-retry-button');
+  final _playingField       = querySelector('#playing-field');
+  final _score              = querySelector('#current-score');
+  final _scoreText          = querySelector('#current-score-text');
+  final _time               = querySelector('#current-time');
+  final _speed              = querySelector('#current-speed');
+  final _speedText          = querySelector('#current-speed-text');
+  final _pauseWindow        = querySelector('#pause-window');
+  final _puzzleWindow       = querySelector('#puzzle-window');
+  final _resetHint          = querySelector('#reset-hint');
+  final _rightHud           = querySelector('#right-hud');
+  final _tutorialWindow     = querySelector('#tutorial-window');
+  final _tutorialText       = querySelector('#tutorial-text');
+  final _tutorialButton     = querySelector('#tutorial-confirm-button');
+  var _selectorLeft;
+  var _block;
 
   /// Button to get back to the index page.
-  HtmlElement get backButton => _backButton;
+  HtmlElement get pauseBackButton => _pauseBackButton;
   /// Button to get back to the stage selection after a puzzle is completed.
   HtmlElement get puzzleBackButton => _puzzleBackButton;
+  /// Button to get back to the stage selection page.
+  HtmlElement get pauseStageButton => _pauseStageButton;
+  /// Button to retry a failed puzzle.
+  HtmlElement get puzzleRetryButton => _puzzleRetryButton;
+  /// Window to show if the player won a puzzle or not.
+  HtmlElement get puzzleWindow => _puzzleWindow;
+  /// Button to confirm the player understood the tutorial.
+  HtmlElement get tutorialButton => _tutorialButton;
 
   /// Used when a new game is started
   void startGame(game) {
@@ -32,6 +48,71 @@ class GameView extends AbstractView {
     updateSpeedLevel(game);
     setSpeedText(game);
     setScoreText(game);
+    _selectorLeft = querySelector('.selector-left');
+    _block = querySelector('.purple');
+  }
+
+  /// Method to start the puzzle mode tutorial.
+  void toggleTutorial(int n) {
+    switch(n) {
+      case 0:
+        _tutorialWindow.classes.toggle('tutorial1');
+        _tutorialWindow.classes.toggle('highlight');
+        _tutorialText.innerHtml = 'Welcome to tetris attack!<br>'
+            '<br>'
+            'Match 3 or more of the same color to remove those blocks.';
+        break;
+      case 1:
+        _tutorialWindow.classes.toggle('highlight');
+        _tutorialWindow.classes.toggle('tutorial1');
+        _tutorialText.innerHtml = 'This is the playing field.<br>'
+            '<br>'
+            'Here you can move your selector with WASD or arrow keys.';
+        _playingField.classes.toggle('highlight');
+        _tutorialWindow.classes.toggle('tutorial2');
+        break;
+      case 2:
+        _playingField.classes.toggle('highlight');
+        _tutorialWindow.classes.toggle('tutorial2');
+        _tutorialText.innerHtml = 'This is your selector.<br>'
+            '<br>'
+            'Swap blocks at the current selector position with SPACE or E.';
+        _selectorLeft.classes.toggle('highlight');
+        _tutorialWindow.classes.toggle('tutorial3');
+        break;
+      case 3:
+        _selectorLeft.classes.toggle('highlight');
+        _tutorialWindow.classes.toggle('tutorial3');
+        _block.classes.toggle('highlight');
+        _tutorialText.innerHtml = 'This is a game block.<br>'
+            '<br>'
+            'You can swap blocks with other blocks or with nothing, simply moving them.';
+        _tutorialWindow.classes.toggle('tutorial4');
+        break;
+      case 4:
+        _block.classes.toggle('highlight');
+        _tutorialWindow.classes.toggle('tutorial4');
+        _tutorialText.innerHtml = 'Here you can see how many swaps you have left.<br>'
+            '<br>'
+            'Also that\'s it from me, good luck solving the puzzles.';
+        _rightHud.classes.toggle('highlight');
+        _tutorialWindow.classes.toggle('tutorial5');
+        break;
+      case 5:
+        _rightHud.classes.toggle('highlight');
+        _tutorialWindow.classes.toggle('tutorial5');
+        _tutorialText.innerHtml = '';
+    }
+  }
+
+  /// Used to toggle the button to get back to the stage selection.
+  void toggleStageButton() {
+    _pauseStageButton.classes.toggle('show-button');
+  }
+
+  /// Used to toggle the button to retry a puzzle.
+  void toggleRetryPuzzleButton() {
+    _puzzleRetryButton.classes.toggle('show-button');
   }
 
   /// Used to toggle the information
@@ -94,6 +175,7 @@ class GameView extends AbstractView {
   void createField(game) {
     // Get the playing field from game
     final blocks = game.field.blocks;
+    final selector = game.field.selector;
     var table = '';
     for (var row = 0; row < blocks.length; row++) {
       // Each row starts with a tr.
@@ -114,6 +196,8 @@ class GameView extends AbstractView {
             _playingField.querySelector('#field_${row}_$col'), growable: false),
         growable: false
     );
+    _field[selector.posRow][selector.posCol].classes.add(selectorSRight);
+    _field[selector.posRow][selector.posCol - 1].classes.add(selectorSLeft);
     _resetHint.innerHtml = game.mode == Gamemode.puzzle ? 'Press R to reset the puzzle!' : 'Press shift to spawn new blocks!';
   }
 

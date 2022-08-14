@@ -1,0 +1,26 @@
+/* ------------------------------------------------------------------------------------------
+ * Highscorepage                                                                            |
+ * ------------------------------------------------------------------------------------------
+ */
+#highscore-table {
+    text-align: center;
+    border-collapse: collapse;
+    height: max(40vh, 250px);
+    width: max(40vw, 250px);
+    border: solid black;
+    background: #4b32a3;
+}
+
+.first-row {
+    border-bottom: 2px solid black;
+    background: #5e45b8;
+}
+
+#no-connection-info {
+    z-index: 100;
+    width: max(40vw, 250px);
+}
+
+#highscore-mainmenu-button {
+    top: max(70vh, 350px);
+}

@@ -1,0 +1,21 @@
+/* ------------------------------------------------------------------------------------------
+ * Mode selection page                                                                      |
+ * ------------------------------------------------------------------------------------------
+ */
+.side-select {
+    width: 50%;
+    cursor: pointer;
+    transition: width 200ms linear, background 200ms linear;
+}
+
+.side-select:hover {
+    background: #6346cf;
+    width: 60%;
+}
+
+#mode-mainmenu-button {
+    top: max(70vh, 200px);
+    height: max(8vh, 50px);
+    width: max(50vh, 300px);
+    font-size: max(5vh, 24px);
+}

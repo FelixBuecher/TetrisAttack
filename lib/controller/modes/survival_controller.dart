@@ -23,17 +23,20 @@ class SurvivalController extends AbstractController {
   }
 
   @override
-  void loseGame(bool mainmenu) {
-    super.loseGame(mainmenu);
+  void loseGame() {
+    super.loseGame();
     _speedLevel.cancel();
     _newStoneSpeed.cancel();
-    if(mainmenu) {
-      _view.indexView.togglePage();
-    } else {
-      _submitHighscore();
-      _view.loseView.loadStats(_game);
-      _view.loseView.togglePage();
-    }
+    _submitHighscore();
+    _view.loseView.loadStats(_game);
+    _view.loseView.togglePage();
+  }
+
+  @override
+  void loseGameMainMenu() {
+    super.loseGameMainMenu();
+    _speedLevel.cancel();
+    _newStoneSpeed.cancel();
   }
 
   @override

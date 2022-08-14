@@ -1,0 +1,37 @@
+/* ------------------------------------------------------------------------------------------
+ * Index page                                                                               |
+ * ------------------------------------------------------------------------------------------
+ */
+#index-page > .title {
+    letter-spacing: .2em;
+    animation: pulsate 2s ease-in-out infinite alternate;
+}
+
+#start-button {
+    top: max(30vh, 120px);
+}
+
+#highscore-button {
+    top: max(40vh, 160px);
+}
+
+#rule-button {
+    top: max(50vh, 200px);
+}
+
+#change-name-button {
+    top: max(60vh, 240px);
+}
+
+#credits {
+    position: absolute;
+    top: 90%;
+}
+
+@keyframes pulsate {
+    from {}
+    to {
+        color: #ebb668;
+        text-shadow: 0 0 20px #ebb668, 0 0 40px #ebb668;
+    }
+}

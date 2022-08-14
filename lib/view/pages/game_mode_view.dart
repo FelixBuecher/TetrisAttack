@@ -6,7 +6,7 @@ class GameModeView extends AbstractView {
 
   final _puzzleButton = querySelector('#left-selection');
   final _survivalButton = querySelector('#right-selection');
-  final _backButton = querySelector('#game-selection-page > .back-button');
+  final _backButton = querySelector('#mode-mainmenu-button');
 
   /// Button to get back to the index page.
   HtmlElement get backButton => _backButton;

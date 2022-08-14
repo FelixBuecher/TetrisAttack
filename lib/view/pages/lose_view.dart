@@ -4,8 +4,8 @@ class LoseView extends AbstractView {
 
   LoseView() : super(querySelector('#lose-page'));
 
-  final _tryAgainButton = querySelector('#again-button');
-  final _backButton = querySelector('#lose-page > .back-button');
+  final _tryAgainButton = querySelector('#lose-again-button');
+  final _backButton = querySelector('#lose-mainmenu-button');
   final _finalScore = querySelector('#final-score');
   final _finalTime = querySelector('#final-time');
 

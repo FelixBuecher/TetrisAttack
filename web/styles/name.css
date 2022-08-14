@@ -1,0 +1,55 @@
+/* ------------------------------------------------------------------------------------------
+ * Name page                                                                                |
+ * ------------------------------------------------------------------------------------------
+ */
+#name-information {
+    position: absolute;
+    top: max(25vh, 120px);
+}
+
+#name-input {
+    position: absolute;
+    text-align: center;
+    top: max(40vh, 200px);
+    font-family: Garamond, serif;
+    color: #DCD330;
+    height: max(4vh, 25px);
+    width: min(40vh, 240px);
+    font-size: max(2.5vh, 16px);
+    background-color: #4b32a3;
+    border: 2px solid black;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+    animation: fadeInDown 2s;
+    animation-delay: 1s;
+    animation-fill-mode: backwards;
+}
+
+#name-input:focus, #name-input:hover {
+    background: #6346cf;
+}
+
+#name-button {
+    top: max(55vh, 280px);
+    animation: fadeInDown 2s;
+    animation-delay: 1s;
+    animation-fill-mode: backwards;
+}
+
+#longer-name-info {
+    position: absolute;
+    top: max(65vh, 320px);
+    animation: fadeInDown 2s;
+    justify-content: center;
+}
+
+@keyframes fadeInDown  {
+    from {
+        opacity:0;
+        transform:translateY(-20px);
+    }
+    to {
+        opacity:1;
+        transform:translateY(0);
+    }
+}

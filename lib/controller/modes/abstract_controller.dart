@@ -26,7 +26,7 @@ abstract class AbstractController {
   void startGame();
 
   /// Called when losing the game, clears everything from the old game.
-  void loseGame(bool mainmenu) {
+  void loseGame() {
     // Stopping the general timers.
     _gameSpeed.cancel();
     _time.cancel();
@@ -37,6 +37,17 @@ abstract class AbstractController {
     // Hide the playing field and clear the table for the next games.
     _view.gameView.togglePage();
     _view.gameView.clearField();
+  }
+
+  /// Called when the player returns to the main menu from the pause window.
+  void loseGameMainMenu() {
+    _gameSpeed.cancel();
+    _time.cancel();
+    _keyListener.cancel();
+    _game.stopGame();
+    _view.gameView.togglePage();
+    _view.gameView.clearField();
+    _view.indexView.togglePage();
   }
 
   /// Called every [_time] interval, updates the model and the view.
@@ -73,7 +84,7 @@ abstract class AbstractController {
         _updateGame();
         _view.gameView.updateSpeedLevel(_game);
       } else {
-        loseGame(false);
+        loseGame();
       }
     }).listen((event) { });
 
@@ -112,16 +123,14 @@ abstract class AbstractController {
             }
             break;
           case primaryPushStones:
-          case secondaryPushStones:
             if(_game.mode == Gamemode.survival) _game.field.generateNewBlocks();
             break;
           case primaryPauseGame:
-          case secondaryPauseGame:
             _view.gameView.togglePauseWindow();
             _pauseGame();
             break;
         }
-      } else if(event.keyCode == primaryPauseGame || event.keyCode == secondaryPauseGame) {
+      } else if(event.keyCode == primaryPauseGame) {
         _view.gameView.togglePauseWindow();
         _resumeGame();
       }

@@ -2,10 +2,10 @@ part of tetris_attack;
 
 class NameView extends AbstractView {
 
-  NameView() : super(querySelector('#player-name-page'));
+  NameView() : super(querySelector('#name-page'));
 
-  final InputElement _playerNameInput = querySelector('#player-name-input');
-  final _playerNameButton = querySelector('#player-name-button');
+  final InputElement _playerNameInput = querySelector('#name-input');
+  final _playerNameButton = querySelector('#name-button');
   final _longerNameInfo = querySelector('#longer-name-info');
 
   /// Button to accept the player name.

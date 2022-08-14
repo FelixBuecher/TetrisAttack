@@ -126,19 +126,25 @@ class PageController {
     ////////////////////////////////////////////////////////////////////////////////
     // Button that is pressed when the player won a puzzle.
     _view.gameView.puzzleBackButton.onClick.listen((event) {
+      _view.gameView.puzzleBackButton.blur();
       _view.gameView.togglePuzzleWindow(false);
       _view.gameView.togglePage();
+      if(!_view.gameView.puzzleRetryButton.classes.contains('show-button')) _view.gameView.toggleRetryPuzzleButton();
+      _view.gameView.toggleStageButton();
+      _view.gameView.toggleRetryPuzzleButton();
       _view.stageSelectView.togglePage();
     });
 
     // Button to take the player back to the index page, from the game page.
-    _view.gameView.backButton.onClick.listen((event) {
-      _view.gameView.backButton.blur();
+    _view.gameView.pauseBackButton.onClick.listen((event) {
+      _view.gameView.pauseBackButton.blur();
       _view.gameView.togglePauseWindow();
       if(_currentMode == Gamemode.survival) {
-        _survivalController.loseGame(true);
+        _survivalController.loseGameMainMenu();
       } else {
-        _puzzleController.loseGame(true);
+        _view.gameView.toggleRetryPuzzleButton();
+        _view.gameView.toggleStageButton();
+        _puzzleController.loseGameMainMenu();
       }
     });
 
@@ -188,11 +194,13 @@ class PageController {
     _view.stageSelectView.stageSelectionButtons.forEach((element) {
       element.onClick.listen((event) async {
         element.blur();
-        _view.stageSelectView.togglePage();
-        _view.gameView.togglePage();
         var level = await _loadLevel(element.id);
+        _view.stageSelectView.togglePage();
         _puzzleController.setLevel(level);
         _currentMode = Gamemode.puzzle;
+        _view.gameView.togglePage();
+        _view.gameView.toggleRetryPuzzleButton();
+        _view.gameView.toggleStageButton();
         _puzzleController.startGame();
       });
     });

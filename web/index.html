@@ -7,98 +7,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <title>Tetris Attack</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/highscore.css">
+    <link rel="stylesheet" href="styles/name.css">
+    <link rel="stylesheet" href="styles/game.css">
+    <link rel="stylesheet" href="styles/rule.css">
+    <link rel="stylesheet" href="styles/select.css">
+    <link rel="stylesheet" href="styles/mode.css">
+    <link rel="stylesheet" href="styles/lose.css">
     <link rel="icon" href="favicon.ico">
     <script defer src="main.dart.js"></script>
 </head>
 
 <body>
     <!-- Page to get the players name and store it locally so that I can use the name for the highscores later -->
-    <div id="player-name-page" class="hidden">
-        <p class="title center">Please enter your name</p>
-        <p id="name-information" class="center medium-text">(this is used for the highscore)</p>
-        <input id="player-name-input" type="text" class="center">
-        <button id="player-name-button" class="center">Accept</button>
-        <p id="longer-name-info" class="hidden center">Your name should be at least 3 chars long :D</p>
+    <div id="name-page" class="page">
+        <p class="title">Please enter your name</p>
+        <p id="name-information" class="medium-text">(this is used for the highscore)</p>
+        <input id="name-input" type="text">
+        <button id="name-button">Accept</button>
+        <p id="longer-name-info" class="page small-text">Your name should be at least 3 chars long :D</p>
     </div>
 
     <!-- Landing page, player can select to start the game, or view rules / highscore here -->
-    <div id="index-page" class="hidden">
-        <p class="title center">Tetris Attack</p>
-        <button id="start-button" class="center">Play</button>
-        <button id="highscore-button" class="center">Highscores</button>
-        <button id="rule-button" class="center">How to play</button>
-        <button id="change-name-button" class="center">Change name</button>
-        <p id="credits" class="center">Made by Felix Bücher</p>
+    <div id="index-page" class="page">
+        <p class="title">Tetris Attack</p>
+        <button id="start-button">Play</button>
+        <button id="highscore-button">Highscores</button>
+        <button id="rule-button">How to play</button>
+        <button id="change-name-button">Change name</button>
+        <p id="credits" class="small-text">Made by Felix Bücher</p>
     </div>
 
-    <!-- Highscore view -->
-    <div id="highscore-page" class="hidden">
-        <table id="highscore-page-table" class="center">
-            <tr>
-                <td>
-                    <p class="title center">Highscores</p>
-                    <div id="loading-container" class="center">
-                        <img id="loading-picture" class="center" src="res/loading.gif" alt="loading"/>
-                    </div>
-                    <button id="highscore-back-button" class="back-button center">Back</button>
-                    <p id="no-connection-info" class="center small-text"></p>
-                    <table id="highscore-table" class="center">
-                    </table>
-                </td>
-            </tr>
-        </table>
+    <!-- Highscore page -->
+    <div id="highscore-page" class="page">
+        <p class="title">Highscores</p>
+        <img id="loading-image" src="res/loading.gif" alt="loading" class="middle-content">
+        <p id="no-connection-info" class="small-text middle-content"></p>
+        <table id="highscore-table" class="middle-content"></table>
+        <button id="highscore-mainmenu-button">Back</button>
     </div>
 
-    <!-- How to play rules here -->
-    <div id="rule-page" class="hidden">
-        <p class="title center">Welcome to Tetris Attack!</p>
-        <img id="instruction" class="center" src="res/instructions.png" alt="instructions">
-        <button class="back-button center">Back</button>
+    <!-- How to play page -->
+    <div id="rule-page" class="page">
+        <p class="title">How to play</p>
+        <img id="instruction" src="res/instructions.png" alt="instructions" class="middle-content">
+        <button id="rule-mainmenu-button">Back</button>
     </div>
 
     <!-- Page that is shows for the played to chose between the puzzle or the survival mode -->
-    <div id="game-selection-page" class="hidden">
+    <div id="game-selection-page" class="page">
         <div id="left-selection" class="side-select">
             <p class="title">Puzzle mode</p>
-            <p class="center medium-text">In the puzzle mode, there are<br>
-                no new stones spawning, <br>
-                but you only have a limited number<br>
-                of moves to clear a stage!</p>
+            <p class="medium-text">Think ahead!<br>
+                You only have a limited number of moves.<br>
+                Clear the field to solve the puzzle!</p>
         </div>
         <div id="right-selection" class="side-select">
             <p class="title">Survival mode</p>
-            <p class="center medium-text">The classic survival mode, <br>
-                survive as long as you can<br>
-                and get as many points as possible!</p>
+            <p class="medium-text">Survive as long as possible!<br>
+                Blocks will spawn in intervals.<br>
+                Do not let them reach the top!</p>
         </div>
-        <button class="back-button center">Back</button>
+        <button id="mode-mainmenu-button">Mainmenu</button>
     </div>
 
     <!-- Page that is shows to the player once he selects the puzzle option, here will all puzzles be listed -->
-    <div id="stage-selection-page" class="hidden">
-        <div id="selection-area" class="center">
+    <div id="stage-selection-page" class="page">
+        <div id="selection-area">
         </div>
-        <button class="back-button center">Mainmenu</button>
+        <button id="stage-mainmenu-button">Mainmenu</button>
     </div>
 
     <!-- Gamepage, with area for the game grid and some information about the current points -->
-    <div id="game-page" class="hidden">
-        <div id="pause-window" class="window hidden center">
-            <p class="center">The game is paused, press ESC or P to resume.</p>
-            <button class="back-button center">Mainmenu</button>
+    <div id="game-page" class="page">
+        <div id="pause-window" class="window page">
+            <p class="small-text">The game is paused, press ESC to resume.</p>
+            <button id="pause-stageselect-button" class="hidden">Stageselect</button>
+            <button id="pause-mainmenu-button">Mainmenu</button>
         </div>
-        <div id="puzzle-window" class="window hidden center">
-            <p class="center">GGWP go next.</p>
-            <button class="back-button center">Back</button>
+        <div id="puzzle-window" class="window page">
+            <p class="small-text">GGWP go next.</p>
+            <button id="puzzle-retry-button" class="hidden">Retry</button>
+            <button id="puzzle-mainmenu-button">Back</button>
         </div>
-        <table id="game-page-table" class="center">
+        <div id="tutorial-window" class="window page">
+            <p id="tutorial-text" class="small-text"></p>
+            <button id="tutorial-confirm-button">Got it</button>
+        </div>
+        <table id="game-page-table">
             <tr>
                 <td>
                     <div class="wrapper">
                         <div class="instruction-container">
-                            <img class="instruction" src="res/inst-left.png" alt="left-instructions">
+                            <img class="instruction" src="res/inst-right.png" alt="left-instructions">
                         </div>
                     </div>
                 </td>
@@ -111,15 +114,15 @@
                     </div>
                 </td>
                 <td>
-                    <div class="wrapper">
-                        <table id="playing-field" class="center">
+                    <div id="playing-field-wrapper" class="wrapper">
+                        <table id="playing-field">
                         </table>
                         <p id="reset-hint"></p>
                     </div>
                 </td>
                 <td>
                     <div class="wrapper">
-                        <div class="hud">
+                        <div id="right-hud" class="hud">
                             <p id="current-score-text">Score</p>
                             <p id="current-score">0</p>
                             <p id="current-speed-text">Speed lv.</p>
@@ -130,7 +133,7 @@
                 <td>
                     <div class="wrapper">
                         <div class="instruction-container">
-                            <img class="instruction" src="res/inst-right.png" alt="right-instructions">
+                            <img class="instruction" src="res/inst-left.png" alt="right-instructions">
                         </div>
                     </div>
                 </td>
@@ -139,16 +142,16 @@
     </div>
 
     <!-- Lose page, that will be shown once the game is over, it will display the final score and gives options to play again -->
-    <div id="lose-page" class="hidden">
-        <p class="title center">You lost</p>
-        <div id="score" class="center">
+    <div id="lose-page" class="page">
+        <p class="title">You lost</p>
+        <div id="score" class="middle-content">
             <p id="final-score-text" class="medium-text">Your final score is:</p>
             <p id="final-score" class="medium-text">0</p>
             <p id="final-time-text" class="medium-text">Seconds survived:</p>
             <p id="final-time" class="medium-text">0</p>
         </div>
-        <button id="again-button" class="center">Try again</button>
-        <button class="back-button center">Mainmenu</button>
+        <button id="lose-again-button">Try again</button>
+        <button id="lose-mainmenu-button">Mainmenu</button>
     </div>
 </body>
 </html>

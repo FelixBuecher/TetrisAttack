@@ -7,7 +7,7 @@ class StageSelectView extends AbstractView {
   }
 
   final _selectionArea = querySelector('#selection-area');
-  final _backButton = querySelector('#stage-selection-page > .back-button');
+  final _backButton = querySelector('#stage-mainmenu-button');
   List<HtmlElement> _stageSelectionButtons;
 
   /// Button to get back to the index page.
