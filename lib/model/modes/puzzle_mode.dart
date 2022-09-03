@@ -1,5 +1,6 @@
 part of tetris_attack;
 
+/// Implementation of the puzzle mode model.
 class PuzzleMode extends AbstractGame {
 
   /// The loaded level for the puzzlemode.

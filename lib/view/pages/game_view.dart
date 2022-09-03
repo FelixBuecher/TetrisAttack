@@ -5,6 +5,8 @@ class GameView extends AbstractView {
   GameView() : super(querySelector('#game-page'));
 
   List<List<HtmlElement>> _field;
+  var _selectorLeft;
+  var _block;
   final _pauseBackButton    = querySelector('#pause-mainmenu-button');
   final _pauseStageButton   = querySelector('#pause-stageselect-button');
   final _puzzleBackButton   = querySelector('#puzzle-mainmenu-button');
@@ -22,21 +24,19 @@ class GameView extends AbstractView {
   final _tutorialWindow     = querySelector('#tutorial-window');
   final _tutorialText       = querySelector('#tutorial-text');
   final _tutorialButton     = querySelector('#tutorial-confirm-button');
-  var _selectorLeft;
-  var _block;
 
   /// Button to get back to the index page.
-  HtmlElement get pauseBackButton => _pauseBackButton;
+  HtmlElement get pauseBackButton   => _pauseBackButton;
   /// Button to get back to the stage selection after a puzzle is completed.
-  HtmlElement get puzzleBackButton => _puzzleBackButton;
+  HtmlElement get puzzleBackButton  => _puzzleBackButton;
   /// Button to get back to the stage selection page.
-  HtmlElement get pauseStageButton => _pauseStageButton;
+  HtmlElement get pauseStageButton  => _pauseStageButton;
   /// Button to retry a failed puzzle.
   HtmlElement get puzzleRetryButton => _puzzleRetryButton;
   /// Window to show if the player won a puzzle or not.
-  HtmlElement get puzzleWindow => _puzzleWindow;
+  HtmlElement get puzzleWindow      => _puzzleWindow;
   /// Button to confirm the player understood the tutorial.
-  HtmlElement get tutorialButton => _tutorialButton;
+  HtmlElement get tutorialButton    => _tutorialButton;
 
   /// Used when a new game is started
   void startGame(game) {

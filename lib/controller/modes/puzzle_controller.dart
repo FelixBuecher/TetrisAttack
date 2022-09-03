@@ -1,38 +1,27 @@
 part of tetris_attack;
 
+/// Controller class for the puzzle mode.
 class PuzzleController extends AbstractController {
 
-  Map<String, dynamic> _level;
+  final Map<String, dynamic> _level;
   StreamSubscription<KeyboardEvent> _resetListener;
-  var _seenTutorial = false;
+  StreamSubscription<MouseEvent> _stageSelectListener;
+  StreamSubscription<MouseEvent> _retryListener;
+  StreamSubscription<MouseEvent> _finishPuzzleListener;
 
-  PuzzleController(View view, LocalStorage localStorage) : super(view, localStorage) {
-    _initWindowNavigation();
-  }
-
-  /// Method that needs to be called before a game gets started, to load the playing field.
-  void setLevel(Map<String, dynamic> level) {
-    _level = level;
-  }
+  PuzzleController(View view, LocalStorage localStorage, this._level) : super(view, localStorage);
 
   @override
   void startGame() {
     _game = PuzzleMode(_level);
     _game.startGame();
     _view.gameView.startGame(_game);
-    if(_level['name'] == 'level1' && !_seenTutorial) {
+    if(_level['name'] == 'level1' && _localStorage.checkTutorial()) {
       _startTutorial(0);
-      _seenTutorial = true;
     } else {
       _initControls();
       _initTimer();
     }
-  }
-
-  @override
-  void loseGame() {
-    super.loseGame();
-    _view.stageSelectView.togglePage();
   }
 
   @override
@@ -48,7 +37,7 @@ class PuzzleController extends AbstractController {
 
   /// Method that is called when the players wins a puzzle, stops the game and displays a window to the player.
   void _finishPuzzle(bool won) {
-    _stop();
+    _stopGame();
     // Updating the player level list
     if(won) {
       _view.gameView.toggleRetryPuzzleButton();
@@ -57,7 +46,33 @@ class PuzzleController extends AbstractController {
       _view.stageSelectView.updateStageSelection(playerLevel);
       _localStorage.saveLevels(playerLevel);
     }
+    _initLoseControls();
     _view.gameView.togglePuzzleWindow(won);
+  }
+
+  /// Method that is called when the user won the puzzle to give controls over the shown buttons.
+  void _initLoseControls() {
+    _retryListener = _view.gameView.puzzleRetryButton.onClick.listen((event) {
+      _retryListener.cancel();
+      _finishPuzzleListener.cancel();
+      _stopGame();
+      _view.gameView.puzzleRetryButton.blur();
+      _view.gameView.togglePuzzleWindow(false);
+      startGame();
+    });
+
+    // Button that is pressed when the player won a puzzle.
+    _finishPuzzleListener = _view.gameView.puzzleBackButton.onClick.listen((event) {
+      _finishPuzzleListener.cancel();
+      _retryListener.cancel();
+      _view.gameView.puzzleBackButton.blur();
+      _view.gameView.togglePuzzleWindow(false);
+      _view.gameView.togglePage();
+      if(!_view.gameView.puzzleRetryButton.classes.contains('show-button')) _view.gameView.toggleRetryPuzzleButton();
+      _view.gameView.toggleStageButton();
+      _view.gameView.toggleRetryPuzzleButton();
+      _view.stageSelectView.togglePage();
+    });
   }
 
   @override
@@ -65,19 +80,43 @@ class PuzzleController extends AbstractController {
     super._initControls();
     _resetListener = window.onKeyDown.listen((event) {
       if(event.keyCode == primaryResetPuzzle && _game.state == Gamestate.running) {
-        if(_view.gameView.puzzleWindow.classes.contains('toggle')) _view.gameView.togglePuzzleWindow(false);
-        _stop();
+        _stopGame();
         startGame();
       }
+    });
+
+    // Button to take the player back to the stage select page, from the game pause window.
+    _stageSelectListener = _view.gameView.pauseStageButton.onClick.listen((event) {
+      _stopGame();
+      _view.gameView.pauseStageButton.blur();
+      _view.gameView.togglePauseWindow();
+      _view.gameView.toggleRetryPuzzleButton();
+      _view.gameView.toggleStageButton();
+      _view.gameView.togglePage();
+      _view.stageSelectView.togglePage();
+    });
+
+    // Button to take the player back to the index page.
+    _mainMenuListener = _view.gameView.pauseBackButton.onClick.listen((event) {
+      _stopGame();
+      _view.gameView.pauseBackButton.blur();
+      _view.gameView.togglePauseWindow();
+      _view.gameView.toggleRetryPuzzleButton();
+      _view.gameView.toggleStageButton();
+      _view.gameView.togglePage();
+      _view.gameView.clearField();
+      _view.indexView.togglePage();
     });
   }
 
   /// Method to stop the game.
-  void _stop() {
+  void _stopGame() {
     _gameSpeed.cancel();
     _time.cancel();
     _keyListener.cancel();
     _resetListener.cancel();
+    _stageSelectListener.cancel();
+    _mainMenuListener.cancel();
     _game.stopGame();
   }
 
@@ -90,29 +129,6 @@ class PuzzleController extends AbstractController {
     _view.gameView.toggleTutorial(n);
     _view.gameView.tutorialButton.onClick.first.then((event) {
       _startTutorial(n + 1);
-    });
-  }
-
-  /// Method to init the extra buttons for the puzzle mode,
-  /// which are shown in the pause or finish window.
-  void _initWindowNavigation() {
-    // Button to retry a failed puzzle.
-    _view.gameView.puzzleRetryButton.onClick.listen((event) {
-      _view.gameView.puzzleRetryButton.blur();
-      _view.gameView.togglePuzzleWindow(false);
-      _stop();
-      startGame();
-    });
-
-    // Button to take the player back to the stage select page, from the game pause window.
-    _view.gameView.pauseStageButton.onClick.listen((event) {
-      _view.gameView.pauseStageButton.blur();
-      _view.gameView.togglePauseWindow();
-      _view.gameView.toggleRetryPuzzleButton();
-      _view.gameView.toggleStageButton();
-      _view.gameView.togglePage();
-      _stop();
-      _view.stageSelectView.togglePage();
     });
   }
 }

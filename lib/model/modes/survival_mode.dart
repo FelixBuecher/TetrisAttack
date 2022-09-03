@@ -1,5 +1,6 @@
 part of tetris_attack;
 
+/// Implementation of the survival mode model.
 class SurvivalMode extends AbstractGame {
 
   int _speedLevel = 1;

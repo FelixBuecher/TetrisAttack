@@ -6,12 +6,12 @@ class StageSelectView extends AbstractView {
     _createStageSelection();
   }
 
-  final _selectionArea = querySelector('#selection-area');
-  final _backButton = querySelector('#stage-mainmenu-button');
   List<HtmlElement> _stageSelectionButtons;
+  final _selectionArea  = querySelector('#selection-area');
+  final _backButton     = querySelector('#stage-mainmenu-button');
 
   /// Button to get back to the index page.
-  HtmlElement get backButton => _backButton;
+  HtmlElement get backButton                  => _backButton;
   /// List of the buttons that the player can press to select a puzzle.
   List<HtmlElement> get stageSelectionButtons => _stageSelectionButtons;
 

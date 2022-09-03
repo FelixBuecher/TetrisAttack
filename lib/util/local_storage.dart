@@ -1,5 +1,6 @@
 part of tetris_attack;
 
+/// This class is used to handle everything related to local storage on the machine.
 class LocalStorage {
   final Storage _storage = window.localStorage;
   final Random _rand = Random();
@@ -54,6 +55,17 @@ class LocalStorage {
   void clearLevels() {
     for(var i = 1; i < puzzleLevelCount + 1; i++) {
       _storage.remove('level$i');
+    }
+  }
+
+  /// Used to check if the player has seen the tutorial.
+  bool checkTutorial() {
+    if(_storage['tutorial'] == null) {
+      _storage['tutorial'] = 'true';
+      return true;
+    } else {
+      _storage['tutorial'] = 'true';
+      return false;
     }
   }
 

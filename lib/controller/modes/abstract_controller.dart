@@ -1,5 +1,8 @@
 part of tetris_attack;
 
+/// Abstract game controller, basis for every mode that I want to add.
+/// Handles the basic game logic to build on top of it in the
+/// concrete implementations of the game controllers.
 abstract class AbstractController {
 
   /// The game model where the magic happens.
@@ -20,34 +23,22 @@ abstract class AbstractController {
   /// The refresh rate that the view and the model will be updated.
   StreamSubscription _gameSpeed;
 
+  /// Mouse listener that is used to check for presses on the main menu button.
+  StreamSubscription<MouseEvent> _mainMenuListener;
+
   AbstractController(this._view, this._localStorage);
 
   /// Called when a new game gets started, needs to be implemented in all game modes.
   void startGame();
 
   /// Called when losing the game, clears everything from the old game.
-  void loseGame() {
-    // Stopping the general timers.
+  void _loseGame() {
+    _game.stopGame();
+    _keyListener.cancel();
     _gameSpeed.cancel();
     _time.cancel();
-    // Unsubscribing from the KeyListener
-    _keyListener.cancel();
-    // Stopping the game
-    _game.stopGame();
-    // Hide the playing field and clear the table for the next games.
     _view.gameView.togglePage();
     _view.gameView.clearField();
-  }
-
-  /// Called when the player returns to the main menu from the pause window.
-  void loseGameMainMenu() {
-    _gameSpeed.cancel();
-    _time.cancel();
-    _keyListener.cancel();
-    _game.stopGame();
-    _view.gameView.togglePage();
-    _view.gameView.clearField();
-    _view.indexView.togglePage();
   }
 
   /// Called every [_time] interval, updates the model and the view.
@@ -84,7 +75,7 @@ abstract class AbstractController {
         _updateGame();
         _view.gameView.updateSpeedLevel(_game);
       } else {
-        loseGame();
+        _loseGame();
       }
     }).listen((event) { });
 

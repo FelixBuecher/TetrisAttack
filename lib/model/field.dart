@@ -1,33 +1,39 @@
 part of tetris_attack;
 
+/// This class the the playing field of the game.
 class Field {
 
-  final List<List<String>> _blocks = List.generate(gameRows, (row) => List.generate(gameCols, (col) => emptyBlockS, growable: false), growable: false);
+  final List<List<String>> _blocks = List.generate(gameRows, (row) =>
+      List.generate(gameCols, (col) =>
+        emptyBlockS, growable: false),
+      growable: false
+  );
+
   final Selector _selector = Selector(3, 10);
   final _rand = Random();
 
   List<Tuple<int>> _removedBlocks = [];
 
-  int _scoreIncrease = 0;
-  int _blockCount = 0;
-  bool _gameOver = false;
-  bool _blocksFalling = false;
   final Gamemode _mode;
+  int _scoreIncrease  = 0;
+  int _blockCount     = 0;
+  bool _gameOver      = false;
+  bool _blocksFalling = false;
 
   /// The selector for the player to swap blocks around.
-  Selector get selector =>              _selector;
+  Selector get selector               => _selector;
   /// List of all the blocks currently in game.
-  List<List<String>> get blocks =>      _blocks;
+  List<List<String>> get blocks       => _blocks;
   /// List of blocks that recently got removed, used to animate the removal.
-  List<Tuple<int>> get removedBlocks => _removedBlocks;
+  List<Tuple<int>> get removedBlocks  => _removedBlocks;
   /// Used to store the information how many blocks are still on the field.
-  int get blockCount =>                 _blockCount;
+  int get blockCount                  => _blockCount;
   /// Used to get the generated points from the last move.
-  int get scoreIncrease =>              _scoreIncrease;
+  int get scoreIncrease               => _scoreIncrease;
   /// If true, a stone has reached the top and the game is now over.
-  bool get gameOver =>                  _gameOver;
+  bool get gameOver                   => _gameOver;
   /// Returns true if blocks are still falling after a move.
-  bool get blocksFalling =>             _blocksFalling;
+  bool get blocksFalling              => _blocksFalling;
 
   Field(this._mode);
 
@@ -62,26 +68,7 @@ class Field {
     for(var row = 0; row < gameRows; row++) {
       for(var col = 0; col < gameCols; col++) {
         var cell = level['level'][row][col];
-        switch(cell) {
-          case 1:
-            blocks[row][col] = gameColors[0];
-            break;
-          case 2:
-            blocks[row][col] = gameColors[1];
-            break;
-          case 3:
-            blocks[row][col] = gameColors[2];
-            break;
-          case 4:
-            blocks[row][col] = gameColors[3];
-            break;
-          case 5:
-            blocks[row][col] = gameColors[4];
-            break;
-          case 6:
-            blocks[row][col] = gameColors[5];
-            break;
-        }
+        if(cell != 0) blocks[row][col] = gameColors[cell - 1];
       }
     }
   }
@@ -96,7 +83,6 @@ class Field {
     if(left == 'eradicator' && right != emptyBlockS) {
       _eradicateColor(right);
       _blocks[row][col - 1] = emptyBlockS;
-
     } else if(left != emptyBlockS && right == 'eradicator') {
       _eradicateColor(left);
       _blocks[row][col] = emptyBlockS;

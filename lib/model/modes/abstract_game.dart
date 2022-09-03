@@ -6,22 +6,22 @@ abstract class AbstractGame {
   final Field _field;
   final Gamemode _mode;
   Gamestate _state;
-  int _time = 0;
+  int _time  = 0;
   int _score = 0;
 
   /// Constructor, used to set the mode.
   AbstractGame(this._mode, this._field);
 
   /// The current state of the game.
-  Gamestate get state =>                _state;
+  Gamestate get state => _state;
   /// The game mode.
-  Gamemode get mode =>                  _mode;
+  Gamemode get mode   => _mode;
   /// The playing field.
-  Field get field =>                    _field;
+  Field get field     => _field;
   /// The currently played time in seconds.
-  int get time =>                       _time;
+  int get time        => _time;
   /// The current score of the player.
-  int get score =>                      _score;
+  int get score       => _score;
 
   /// Called when a new game gets started.
   void startGame();

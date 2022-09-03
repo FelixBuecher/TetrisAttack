@@ -1,5 +1,6 @@
 part of tetris_attack;
 
+/// Simple tuple class to quickly compare a pair of coordinates.
 class Tuple<T> {
 
   T first;

@@ -1,6 +1,6 @@
 part of tetris_attack;
 
-/// Controller of the page, holds game controllers and the logic to the page navigation.
+/// Controller of the page, holds the current game controller and the logic to the page navigation.
 class PageController {
 
   /// Used to locally store the username, so that the user does not have to type it everytime.
@@ -9,19 +9,14 @@ class PageController {
   /// The dedicated view that the controller gets his input from.
   final View _view = View();
 
-  /// Controller for the survival mode.
-  SurvivalController _survivalController;
+  /// Api caller to save to the database and load from it.
+  final APICaller _apiCaller = APICaller();
 
-  /// Controller for the puzzle mode.
-  PuzzleController _puzzleController;
-
-  /// Saves the currently started game mode.
-  Gamemode _currentMode;
+  /// Current Game Controller
+  var _currentController;
 
   /// Constructor for the Controller, initialises the index page navigation.
   PageController() {
-    _puzzleController = PuzzleController(_view, _localStorage);
-    _survivalController = SurvivalController(_view, _localStorage);
     _checkIfPlayerHasName();
     _initPageNavigation();
   }
@@ -37,17 +32,40 @@ class PageController {
     }
   }
 
+  /// Method used to load a level from the site.
   Future<Map<String, dynamic>> _loadLevel(String level) async {
     var response = await http.get(Uri.http(window.location.host, 'res/level/$level.json'));
     Map<String, dynamic> parameters = jsonDecode(response.body);
     return parameters;
   }
 
-  /// Used to give the buttons to navigate the index page, listeners and functions.
+  /// Called to initiate the current game controller to the mode that should be started.
+  /// Needs a level if a puzzle mode gets started.
+  void _initiateGame(Gamemode mode, {var level}) {
+    switch(mode) {
+      case Gamemode.survival:
+        _currentController = SurvivalController(_view, _localStorage, _apiCaller);
+        break;
+      case Gamemode.puzzle:
+        _currentController = PuzzleController(_view, _localStorage, level);
+        break;
+    }
+    _currentController.startGame();
+  }
+
+  /// Used to setup the navigation for tha page.
   void _initPageNavigation() {
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////       INDEX PAGE       ////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+    _initIndexNav();
+    _initNameNav();
+    _initLoseNav();
+    _initRuleNav();
+    _initStageSelectionNav();
+    _initHighScoreNav();
+    _initGameModeSelectionNav();
+  }
+
+  /// Used to initiate the navigation for the index page.
+  void _initIndexNav() {
     // Button to start a new game.
     _view.indexView.startButton.onClick.listen((event) {
       _view.indexView.startButton.blur();
@@ -61,23 +79,8 @@ class PageController {
       _view.indexView.togglePage();
       _view.highScoreView.initPage();
       _view.highScoreView.togglePage();
-      try {
-        var ingressUrl = window.location.host.replaceFirst('webapp', 'rest');
-        var response =  await http.get(Uri.http(ingressUrl, '/highscore'));
-        if (response.statusCode != 200) throw Exception('${response.statusCode}');
-        Map<String, dynamic> data = jsonDecode(response.body);
-        _view.highScoreView.loadHighscores(data);
-      } catch(_) {
-        try {
-          var localUrl = (window.location.hostname + ':$restPort');
-          var response =  await http.get(Uri.http(localUrl, '/highscore'));
-          if (response.statusCode != 200) throw Exception('${response.statusCode}');
-          Map<String, dynamic> data = jsonDecode(response.body);
-          _view.highScoreView.loadHighscores(data);
-        } catch(_) {
-          _view.highScoreView.loadHighscores(null);
-        }
-      }
+      var data = await _apiCaller.fetchHighScore();
+      _view.highScoreView.loadHighscores(data);
     });
 
     // Button to show the rules of the game.
@@ -93,10 +96,10 @@ class PageController {
       _view.indexView.togglePage();
       _view.nameView.togglePage();
     });
+  }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////     GAMEMODE  PAGE     ////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+  /// Used to initiate the navigation for the game mode selection page.
+  void _initGameModeSelectionNav() {
     // Button to start the puzzle mode.
     _view.gameModeView.puzzleButton.onClick.listen((event) {
       _view.gameModeView.puzzleButton.blur();
@@ -110,8 +113,7 @@ class PageController {
       _view.gameModeView.survivalButton.blur();
       _view.gameModeView.togglePage();
       _view.gameView.togglePage();
-      _currentMode = Gamemode.survival;
-      _survivalController.startGame();
+      _initiateGame(Gamemode.survival);
     });
 
     // Button in the game selection page to return to the index page.
@@ -120,57 +122,30 @@ class PageController {
       _view.gameModeView.togglePage();
       _view.indexView.togglePage();
     });
+  }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////       GAME  PAGE       ////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-    // Button that is pressed when the player won a puzzle.
-    _view.gameView.puzzleBackButton.onClick.listen((event) {
-      _view.gameView.puzzleBackButton.blur();
-      _view.gameView.togglePuzzleWindow(false);
-      _view.gameView.togglePage();
-      if(!_view.gameView.puzzleRetryButton.classes.contains('show-button')) _view.gameView.toggleRetryPuzzleButton();
-      _view.gameView.toggleStageButton();
-      _view.gameView.toggleRetryPuzzleButton();
-      _view.stageSelectView.togglePage();
-    });
-
-    // Button to take the player back to the index page, from the game page.
-    _view.gameView.pauseBackButton.onClick.listen((event) {
-      _view.gameView.pauseBackButton.blur();
-      _view.gameView.togglePauseWindow();
-      if(_currentMode == Gamemode.survival) {
-        _survivalController.loseGameMainMenu();
-      } else {
-        _view.gameView.toggleRetryPuzzleButton();
-        _view.gameView.toggleStageButton();
-        _puzzleController.loseGameMainMenu();
-      }
-    });
-
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////     HIGHSCORE PAGE     ////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+  /// Used to initiate the navigation for the high score page.
+  void _initHighScoreNav() {
     // Button to take the player back to the index page, from the highscore page.
     _view.highScoreView.backButton.onClick.listen((event) {
       _view.highScoreView.backButton.blur();
       _view.highScoreView.togglePage();
       _view.indexView.togglePage();
     });
+  }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////       RULE  PAGE       ////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+  /// Used to initiate the navigation for the rule page.
+  void _initRuleNav() {
     // Button to take the player back to the index page, from the rule page.
     _view.ruleView.backButton.onClick.listen((event) {
       _view.ruleView.backButton.blur();
       _view.ruleView.togglePage();
       _view.indexView.togglePage();
     });
+  }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////       LOSE  PAGE       ////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+  /// Used to initiate the navigation for the lose page.
+  void _initLoseNav() {
     // Button to take the player back to the index page, from the lose page.
     _view.loseView.backButton.onClick.listen((event) {
       _view.loseView.backButton.blur();
@@ -183,25 +158,22 @@ class PageController {
       _view.loseView.tryAgainButton.blur();
       _view.loseView.togglePage();
       _view.gameView.togglePage();
-      _currentMode = Gamemode.survival;
-      _survivalController.startGame();
+      _initiateGame(Gamemode.survival);
     });
+  }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////      STAGE  PAGE       ////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+  /// Used to initiate the navigation for the stage selection page.
+  void _initStageSelectionNav() {
     // Player clicked on one of the puzzle selection tiles.
     _view.stageSelectView.stageSelectionButtons.forEach((element) {
       element.onClick.listen((event) async {
         element.blur();
-        var level = await _loadLevel(element.id);
         _view.stageSelectView.togglePage();
-        _puzzleController.setLevel(level);
-        _currentMode = Gamemode.puzzle;
+        var level = await _loadLevel(element.id);
+        _initiateGame(Gamemode.puzzle, level: level);
         _view.gameView.togglePage();
         _view.gameView.toggleRetryPuzzleButton();
         _view.gameView.toggleStageButton();
-        _puzzleController.startGame();
       });
     });
 
@@ -211,16 +183,16 @@ class PageController {
       _view.stageSelectView.togglePage();
       _view.indexView.togglePage();
     });
+  }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////       NAME  PAGE       ////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-    // Button to confirm the players name.
+  /// Used to initiate the navigation for the name page.
+  void _initNameNav() {
+    // Button that gets pressed when the name gets confirmed.
     _view.nameView.playerNameButton.onClick.listen((event) {
       _view.nameView.playerNameButton.blur();
       var name = _view.nameView.playerNameInput.value.replaceAll(' ', '');
       if(name.length < 3) {
-        if(!_view.nameView.longerNameInfo.classes.contains('toggle')) _view.nameView.toggleLongerNameInfo();
+        _view.nameView.toggleLongerNameInfo();
       } else {
         _localStorage.saveUsername(name);
         _view.nameView.togglePage();

@@ -1,5 +1,6 @@
 part of tetris_attack;
 
+/// Controller class for the survival mode.
 class SurvivalController extends AbstractController {
 
   /// The time interval after which new stones will be generated, this interval will get
@@ -9,9 +10,12 @@ class SurvivalController extends AbstractController {
   /// The interval in which [_newStoneSpeed] will be increased.
   StreamSubscription _speedLevel;
 
+  /// API caller which is gotten from the page controller.
+  final APICaller _apiCaller;
+
   Duration _currentNewStoneSpeed = newBlockSpeed;
 
-  SurvivalController(View view, LocalStorage localStorage) : super(view, localStorage);
+  SurvivalController(View view, LocalStorage localStorage, this._apiCaller) : super(view, localStorage);
 
   @override
   void startGame() {
@@ -23,20 +27,13 @@ class SurvivalController extends AbstractController {
   }
 
   @override
-  void loseGame() {
-    super.loseGame();
+  void _loseGame() {
+    super._loseGame();
     _speedLevel.cancel();
     _newStoneSpeed.cancel();
-    _submitHighscore();
+    _apiCaller.submitHighScore(_localStorage.loadUsername(), _localStorage.loadUniqueID(), _game.score);
     _view.loseView.loadStats(_game);
     _view.loseView.togglePage();
-  }
-
-  @override
-  void loseGameMainMenu() {
-    super.loseGameMainMenu();
-    _speedLevel.cancel();
-    _newStoneSpeed.cancel();
   }
 
   @override
@@ -51,6 +48,14 @@ class SurvivalController extends AbstractController {
     super._resumeGame();
     _speedLevel.resume();
     _newStoneSpeed.resume();
+  }
+
+  /// Method that is used to return to the index page.
+  void _loseGameMainMenu() {
+    super._loseGame();
+    _speedLevel.cancel();
+    _newStoneSpeed.cancel();
+    _view.indexView.togglePage();
   }
 
   /// Updates the speed level the player is playing on.
@@ -78,63 +83,17 @@ class SurvivalController extends AbstractController {
 
   /// Method used to submit the scored highscore to the leaderboard,
   /// if the now scored score is higher than the all time high of the player.
-  void _submitHighscore() async {
-    var name = _localStorage.loadUsername();
-    var uid = _localStorage.loadUniqueID();
-    var score = _game.score;
-    try {
-      var ingressUrl = window.location.host.replaceFirst('webapp', 'rest');
-      var response =  await http.get(Uri.http(ingressUrl, '/highscore').replace(
-          queryParameters: {
-            'uid': uid
-          }
-      ));
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(response.body);
-        var highscore = double.parse(data.values.first).round();
-        if(score < highscore) score = highscore;
-      }
 
-      await http.post(
-          Uri.http(ingressUrl, '/highscore'),
-          headers: <String, String>{
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: <String, String>{
-            'uid': uid,
-            'name': name,
-            'score': score.toString()
-          }
-      );
-
-    } catch(_) {
-      try {
-        var localUrl = (window.location.hostname + ':$restPort');
-        var response =  await http.get(Uri.http(localUrl, '/highscore').replace(
-            queryParameters: {
-              'uid': uid
-            }
-        ));
-
-        if (response.statusCode == 200) {
-          Map<String, dynamic> data = jsonDecode(response.body);
-          var highscore = double.parse(data.values.first).round();
-          if(score < highscore) score = highscore;
-        }
-
-        await http.post(
-            Uri.http(localUrl, '/highscore'),
-            headers: <String, String>{
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: <String, String>{
-              'uid': uid,
-              'name': name,
-              'score': score.toString()
-            }
-        );
-      } catch(_) {}
-    }
+  @override
+  void _initControls() {
+    super._initControls();
+    // Button to take the player back to the index page.
+    _mainMenuListener = _view.gameView.pauseBackButton.onClick.listen((event) {
+      _view.gameView.pauseBackButton.blur();
+      _view.gameView.togglePauseWindow();
+      _mainMenuListener.cancel();
+      _loseGameMainMenu();
+    });
   }
 }

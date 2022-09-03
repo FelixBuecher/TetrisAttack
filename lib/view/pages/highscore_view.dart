@@ -4,10 +4,10 @@ class HighScoreView extends AbstractView {
 
   HighScoreView() : super(querySelector('#highscore-page'));
 
-  final _table = querySelector('#highscore-table');
-  final _backButton = querySelector('#highscore-mainmenu-button');
+  final _table            = querySelector('#highscore-table');
+  final _backButton       = querySelector('#highscore-mainmenu-button');
   final _noConnectionInfo = querySelector('#no-connection-info');
-  final _loading = querySelector('#loading-image');
+  final _loading          = querySelector('#loading-image');
 
   /// Button to get back to the index page.
   HtmlElement get backButton => _backButton;
